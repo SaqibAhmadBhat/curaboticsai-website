@@ -1,21 +1,8 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
+const resend = new Resend(process.env.RESEND_API_KEY);
 const RECIPIENT_EMAIL = "er.swt.saqibahmad@gmail.com";
-
-/* ------------------------------------------------------------------ */
-/*  Nodemailer transporter — Gmail App Password                        */
-/*  Set GMAIL_USER and GMAIL_APP_PASSWORD in .env.local                */
-/* ------------------------------------------------------------------ */
-function getTransporter() {
-  return nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.GMAIL_USER || RECIPIENT_EMAIL,
-      pass: process.env.GMAIL_APP_PASSWORD || "",
-    },
-  });
-}
 
 /* ------------------------------------------------------------------ */
 /*  Build a professional HTML email template                           */
@@ -113,7 +100,7 @@ export async function POST(request: Request) {
       missing.push("Assistance Needed");
 
     /* Email validation */
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!email?.trim() || !emailRegex.test(email)) {
       return NextResponse.json(
         { error: "A valid email address is required." },
@@ -129,24 +116,31 @@ export async function POST(request: Request) {
     }
 
     /* ---------- Send email ---------- */
-    const transporter = getTransporter();
-
-    await transporter.sendMail({
-      from: `"CuraBotics AI" <${process.env.GMAIL_USER || RECIPIENT_EMAIL}>`,
-      to: RECIPIENT_EMAIL,
+    const { data: emailData, error: resendError } = await resend.emails.send({
+      from: "CuraBotics AI <onboarding@resend.dev>",
+      to: [RECIPIENT_EMAIL],
       replyTo: email,
       subject: `🏥 Enterprise Inquiry — ${companyName} (${orgType})`,
       html: buildEmailHTML(body),
     });
+
+    if (resendError) {
+      console.error("Resend API Email Delivery Error:", resendError);
+      return NextResponse.json(
+        { error: "Failed to send inquiry via Resend API. Please try again later." },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
       { success: true, message: "Consultation inquiry submitted successfully." },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Contact API error:", error);
+    // We log the unexpected error server-side to avoid leaking any internal stack trace to the frontend
+    console.error("Contact API Unexpected Error:", error);
     return NextResponse.json(
-      { error: "Failed to send inquiry. Please try again or contact us directly." },
+      { error: "An unexpected error occurred. Please try again or contact us directly." },
       { status: 500 }
     );
   }

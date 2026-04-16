@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FounderPreview } from "@/components/sections/home/FounderPreview";
 
 export const metadata: Metadata = {
   title: "About",
@@ -7,15 +8,8 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <section className="py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-heading text-4xl font-bold tracking-tight">
-          About CuraBotics AI
-        </h1>
-        <p className="mt-4 max-w-2xl text-lg text-[hsl(var(--muted-foreground))]">
-          Bridging German precision engineering with AI-driven healthcare solutions.
-        </p>
-      </div>
-    </section>
+    <div className="pt-20">
+      <FounderPreview />
+    </div>
   );
 }
