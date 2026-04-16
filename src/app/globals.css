@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%; /* #F8FAFC */
+    --foreground: 222 47% 11%; /* #0F172A */
+    
+    --card: 0 0% 100%; /* #FFFFFF */
+    --card-foreground: 222 47% 11%;
+    
+    --muted: 214 32% 91%; /* #E2E8F0 */
+    --muted-foreground: 215 19% 35%; /* #475569 */
+    
+    --border: 214 32% 91%; /* #E2E8F0 */
+    --ring: 200 98% 39%; /* #0284C7 */
+
+    --primary: 200 98% 39%; /* #0284C7 */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 222 47% 11%;
+    
+    --accent: 142 71% 45%; /* #22C55E */
+    --accent-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    --background: 229 84% 5%; /* #020617 */
+    --foreground: 210 40% 98%; /* #F8FAFC */
+    
+    --card: 222 47% 11%; /* #0F172A */
+    --card-foreground: 210 40% 98%;
+    
+    --muted: 217 33% 17%; /* #1E293B */
+    --muted-foreground: 215 28% 87%; /* #CBD5E1 */
+    
+    --border: 215 25% 27%; /* #334155 */
+    --ring: 200 96% 60%; /* #38BDF8 */
+
+    --primary: 200 96% 60%; /* #38BDF8 */
+    --primary-foreground: 229 84% 5%;
+    
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --accent: 142 76% 36%; /* #4ADE80 */
+    --accent-foreground: 229 84% 5%;
+  }
+
+  * {
+    @apply border-[hsl(var(--border))];
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-[hsl(var(--background))] text-[hsl(var(--foreground))] antialiased;
+  }
+
+  ::selection {
+    @apply bg-[hsl(var(--primary)/0.2)] text-[hsl(var(--primary))];
+  }
+  
+  .dark ::selection {
+    @apply bg-[hsl(var(--primary)/0.4)] text-white;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-[hsl(var(--muted-foreground)/0.3)] rounded-full hover:bg-[hsl(var(--muted-foreground)/0.5)] transition-colors;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Structural Utilities */
+  .section-spacing {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+
+  .container-base {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Aesthetic Utilities */
+  .glassmorphism {
+    @apply bg-white/40 backdrop-blur-md border border-white/20 dark:bg-black/40 dark:border-white/10;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-500 to-brand-500;
+  }
+  
+  .shadow-soft {
+    @apply shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(255,255,255,0.02)];
+  }
+
+  /* Interactive Elements */
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-md font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] hover:bg-[hsl(var(--primary)/0.9)] hover:shadow-lg hover:-translate-y-0.5 h-10 py-2 px-4;
+  }
+}
