@@ -1,17 +1,8 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
+const resend = new Resend(process.env.RESEND_API_KEY);
 const RECIPIENT_EMAIL = "er.swt.saqibahmad@gmail.com";
-
-function getTransporter() {
-  return nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.GMAIL_USER || RECIPIENT_EMAIL,
-      pass: process.env.GMAIL_APP_PASSWORD || "",
-    },
-  });
-}
 
 export async function POST(request: Request) {
   try {
@@ -19,7 +10,7 @@ export async function POST(request: Request) {
     const { email } = body;
 
     /* ---------- Email validation ---------- */
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!email?.trim() || !emailRegex.test(email)) {
       return NextResponse.json(
         { error: "Please enter a valid email address." },
@@ -28,11 +19,9 @@ export async function POST(request: Request) {
     }
 
     /* ---------- Send notification email ---------- */
-    const transporter = getTransporter();
-
-    await transporter.sendMail({
-      from: `"CuraBotics AI" <${process.env.GMAIL_USER || RECIPIENT_EMAIL}>`,
-      to: RECIPIENT_EMAIL,
+    const { error: resendError } = await resend.emails.send({
+      from: "CuraBotics AI <onboarding@resend.dev>",
+      to: [RECIPIENT_EMAIL],
       subject: `📬 New Newsletter Subscriber — ${email}`,
       html: `
 <!DOCTYPE html>
@@ -54,6 +43,14 @@ export async function POST(request: Request) {
 </body>
 </html>`,
     });
+
+    if (resendError) {
+      console.error("Resend API Newsletter Error:", resendError);
+      return NextResponse.json(
+        { error: "Subscription delivery failed. Please try again." },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
       { success: true, message: "Thank you for subscribing to CuraBotics AI updates." },
