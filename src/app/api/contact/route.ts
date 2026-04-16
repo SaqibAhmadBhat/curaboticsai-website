@@ -119,7 +119,7 @@ export async function POST(request: Request) {
     const { data: emailData, error: resendError } = await resend.emails.send({
       from: "CuraBotics AI <onboarding@resend.dev>",
       to: [RECIPIENT_EMAIL],
-      replyTo: email,
+      reply_to: email,
       subject: `🏥 Enterprise Inquiry — ${companyName} (${orgType})`,
       html: buildEmailHTML(body),
     });
