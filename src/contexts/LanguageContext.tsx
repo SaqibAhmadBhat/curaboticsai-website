@@ -1,8 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 
 type Locale = "en" | "de" | "es" | "ar" | "ur" | "hi" | "fr" | "zh";
+
+const SUPPORTED_LOCALES: Locale[] = ["en", "de", "es", "ar", "ur", "hi", "fr", "zh"];
+const RTL_LOCALES: Locale[] = ["ar", "ur"];
+const STORAGE_KEY = "cb_locale";
 
 interface LanguageContextType {
   locale: Locale;
@@ -20,68 +24,84 @@ const defaultContext: LanguageContextType = {
 
 const LanguageContext = createContext<LanguageContextType>(defaultContext);
 
-const RTL_LOCALES: Locale[] = ["ar", "ur"];
+/** Read saved locale from localStorage (SSR-safe) */
+function getSavedLocale(): Locale {
+  if (typeof window === "undefined") return "en";
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY) as Locale;
+    if (saved && SUPPORTED_LOCALES.includes(saved)) return saved;
+  } catch {}
+  return "en";
+}
+
+/** Apply lang & dir attributes to <html> */
+function applyHtmlAttributes(locale: Locale) {
+  if (typeof document === "undefined") return;
+  document.documentElement.lang = locale;
+  document.documentElement.dir = RTL_LOCALES.includes(locale) ? "rtl" : "ltr";
+}
 
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
-  const [locale, setLocaleState] = useState<Locale>("en");
+  // Lazy-init locale from localStorage so the very first render uses the saved value
+  const [locale, setLocaleState] = useState<Locale>(() => getSavedLocale());
   const [dictionary, setDictionary] = useState<Record<string, any>>({});
   const [isLoaded, setIsLoaded] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const loadIdRef = useRef(0); // cancellation token for stale loads
 
-  // Initialize lang from localStorage (SSR-safe)
+  // Apply HTML attributes on mount + whenever locale changes
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("cb_locale") as Locale;
-      const finalLocale = (saved && ["en", "de", "es", "ar", "ur", "hi", "fr", "zh"].includes(saved)) ? saved : "en";
-      setLocaleState(finalLocale);
-      document.documentElement.lang = finalLocale;
-      document.documentElement.dir = RTL_LOCALES.includes(finalLocale) ? "rtl" : "ltr";
-    } catch {
-      // localStorage not available (SSR)
-    }
-  }, []);
+    applyHtmlAttributes(locale);
+  }, [locale]);
 
   const setLocale = useCallback((lang: Locale) => {
-    // Smooth fade transition
+    if (!SUPPORTED_LOCALES.includes(lang)) return;
+
+    // Start fade-out immediately
     setIsTransitioning(true);
-    setTimeout(() => {
-      setLocaleState(lang);
-      try { localStorage.setItem("cb_locale", lang); } catch {}
-      document.documentElement.lang = lang;
-      document.documentElement.dir = RTL_LOCALES.includes(lang) ? "rtl" : "ltr";
-    }, 150); // Small delay for fade-out
+
+    // Update state synchronously — no setTimeout
+    setLocaleState(lang);
+
+    // Persist
+    try { localStorage.setItem(STORAGE_KEY, lang); } catch {}
+
+    // HTML attributes
+    applyHtmlAttributes(lang);
   }, []);
 
-  // Load dictionary on locale change
+  // Load dictionary whenever locale changes
   useEffect(() => {
-    let active = true;
+    const id = ++loadIdRef.current;
+
     const loadDict = async () => {
       try {
         const dict = await import(`../i18n/locales/${locale}.json`);
-        if (active) {
-          setDictionary(dict.default);
-          setIsLoaded(true);
-          // Fade back in after dictionary is loaded
-          setTimeout(() => setIsTransitioning(false), 50);
-        }
+        if (id !== loadIdRef.current) return; // stale
+        setDictionary(dict.default);
+        setIsLoaded(true);
+        // Small delay so fade-in happens after dictionary is applied
+        requestAnimationFrame(() => {
+          if (id === loadIdRef.current) setIsTransitioning(false);
+        });
       } catch (err) {
         console.error(`Failed to load ${locale} translations, falling back to English`, err);
         try {
           const dict = await import(`../i18n/locales/en.json`);
-          if (active) {
-            setDictionary(dict.default);
-            setIsLoaded(true);
-            setTimeout(() => setIsTransitioning(false), 50);
-          }
+          if (id !== loadIdRef.current) return;
+          setDictionary(dict.default);
+          setIsLoaded(true);
+          requestAnimationFrame(() => {
+            if (id === loadIdRef.current) setIsTransitioning(false);
+          });
         } catch {}
       }
     };
 
     loadDict();
-    return () => { active = false; };
   }, [locale]);
 
-  // Handle nested keys: "hero.titleLine1" -> dictionary.hero.titleLine1
+  // Nested key resolver: "hero.titleLine1" -> dictionary.hero.titleLine1
   const t = useCallback((key: string): string => {
     const keys = key.split(".");
     let value: any = dictionary;
@@ -89,7 +109,7 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
       if (value && value[k] !== undefined) {
         value = value[k];
       } else {
-        return key; // return key as fallback
+        return key; // fallback to key
       }
     }
     return typeof value === "string" ? value : key;

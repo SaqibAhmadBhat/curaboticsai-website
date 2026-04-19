@@ -248,5 +248,32 @@
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",
     "rights": "All rights reserved."
+  },
+  "indiaGermanyBridge": {
+    "badge": "Global MedTech Corridor",
+    "titleLine1": "Connecting India & Germany",
+    "titleGradient": "Healthcare Innovation",
+    "subtitle": "Bridging India's massive hospital demand and distribution scale with Germany's manufacturing precision and engineering excellence.",
+    "centerTag": "Strategic Moat",
+    "deTitle": "German MedTech Ecosystem",
+    "deSubtitle": "Engineering Excellence & CE MDR Standard",
+    "deFeat1": "Precision Manufacturing",
+    "deFeat1Desc": "World-class robotics and highly reliable medical imaging equipment.",
+    "deFeat2": "CE / MDR Compliance",
+    "deFeat2Desc": "Strict quality standards ensuring the highest level of patient safety.",
+    "deFeat3": "R&D Innovation",
+    "deFeat3Desc": "Advanced research labs continuously pushing medical frontiers.",
+    "inTitle": "Indian Healthcare Market",
+    "inSubtitle": "Massive Scale & Government Procurement",
+    "inFeat1": "Hospital Demand",
+    "inFeat1Desc": "Rapidly growing multi-specialty hospital infrastructure.",
+    "inFeat2": "GeM Ecosystem",
+    "inFeat2Desc": "Access to large-scale government procurement tenders.",
+    "inFeat3": "Distribution Scale",
+    "inFeat3Desc": "Extensive reach delivering premium care to a billion people.",
+    "ctaTitle": "Enter New Markets Today",
+    "ctaDesc": "Partner with CuraBotics AI for cross-border strategic sourcing, market entry support, and robotics deployment.",
+    "btn1": "Explore Partnerships",
+    "btn2": "Request Consultation"
   }
 }

@@ -61,7 +61,7 @@ export function Navbar() {
     >
       <div className="container-base flex h-20 items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group shrink-0">
-          <img src="/logo/curabotics-logo.png" alt="CuraBotics AI" className="h-10 md:h-11 w-auto object-contain transition-transform group-hover:scale-105" />
+          <img src="/logo/curabotics-logo.png" alt="CuraBotics AI — Healthcare Technology & Medical AI Solutions" className="h-10 md:h-11 w-auto object-contain transition-transform group-hover:scale-105" />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-6">

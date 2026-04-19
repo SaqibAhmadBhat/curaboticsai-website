@@ -1,75 +1,120 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const RECIPIENT_EMAIL = "er.swt.saqibahmad@gmail.com";
 
 /* ------------------------------------------------------------------ */
-/*  Build a professional HTML email template                           */
+/*  Build Admin Email HTML                                           */
 /* ------------------------------------------------------------------ */
-function buildEmailHTML(data: Record<string, string | string[]>) {
-  const rows = [
-    { label: "Full Name", value: data.fullName },
-    { label: "Company / Organization", value: data.companyName },
-    { label: "Email Address", value: data.email },
-    { label: "Phone / WhatsApp", value: data.phone },
-    { label: "Country", value: data.country },
-    { label: "City / Location", value: data.city },
-    { label: "Organization Type", value: data.orgType },
-    {
-      label: "Assistance Needed",
-      value: Array.isArray(data.assistance)
-        ? data.assistance.join(", ")
-        : data.assistance,
-    },
-    { label: "Intent", value: data.intent },
-    { label: "Equipment / Technology", value: data.equipmentNeeded || "N/A" },
-  ];
-
+function buildAdminHTML(data: Record<string, any>) {
   return `
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;background:#f4f6f8;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
-  <div style="max-width:640px;margin:30px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08)">
-    <!-- Header -->
-    <div style="background:linear-gradient(135deg,#1a73b5 0%,#155a8a 100%);padding:28px 32px">
-      <h1 style="margin:0;color:#fff;font-size:22px;font-weight:700">🏥 CuraBotics AI — New Enterprise Inquiry</h1>
-      <p style="margin:6px 0 0;color:rgba(255,255,255,.85);font-size:14px">Submitted via website consultation form</p>
+  <div style="font-family:Arial,sans-serif;max-width:700px;margin:auto;background:#fff;border:1px solid #eee;border-radius:12px;overflow:hidden">
+    <div style="background:#0b63f6;padding:24px;color:#fff">
+      <h2 style="margin:0;">🏥 New Enterprise Inquiry</h2>
+      <p style="margin:8px 0 0;">Submitted via CuraBotics AI website</p>
     </div>
-    <!-- Body -->
-    <div style="padding:28px 32px">
-      <table style="width:100%;border-collapse:collapse">
-        ${rows
-          .map(
-            (r) => `
-        <tr>
-          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#6b7280;font-size:13px;font-weight:600;width:180px;vertical-align:top">${r.label}</td>
-          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#1f2937;font-size:14px">${r.value || "—"}</td>
-        </tr>`
-          )
-          .join("")}
+
+    <div style="padding:24px;">
+      <table width="100%" cellspacing="0" cellpadding="8" style="border-collapse:collapse;">
+        <tr><td><b>Name</b></td><td>${data.fullName}</td></tr>
+        <tr><td><b>Company</b></td><td>${data.companyName}</td></tr>
+        <tr><td><b>Email</b></td><td>${data.email}</td></tr>
+        <tr><td><b>Phone</b></td><td>${data.phone}</td></tr>
+        <tr><td><b>Country</b></td><td>${data.country}</td></tr>
+        <tr><td><b>City</b></td><td>${data.city}</td></tr>
+        <tr><td><b>Organization Type</b></td><td>${data.orgType}</td></tr>
+        <tr><td><b>Intent</b></td><td>${data.intent}</td></tr>
+        <tr><td><b>Equipment Needed</b></td><td>${data.equipmentNeeded || "N/A"}</td></tr>
+        <tr><td><b>Assistance</b></td><td>${Array.isArray(data.assistance) ? data.assistance.join(", ") : data.assistance}</td></tr>
       </table>
-      <!-- Project Details -->
-      <div style="margin-top:20px;padding:16px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb">
-        <p style="margin:0 0 8px;color:#6b7280;font-size:13px;font-weight:600">📋 Project Details / Requirements</p>
-        <p style="margin:0;color:#1f2937;font-size:14px;white-space:pre-wrap;line-height:1.6">${data.projectDetails || "—"}</p>
+
+      <div style="margin-top:20px;padding:16px;background:#f8fafc;border-radius:10px;">
+        <b>Project Details</b>
+        <p>${data.projectDetails}</p>
       </div>
     </div>
-    <!-- Footer -->
-    <div style="padding:16px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center">
-      <p style="margin:0;color:#9ca3af;font-size:12px">CuraBotics AI — Global Healthcare Technology Solutions & Procurement</p>
-    </div>
   </div>
-</body>
-</html>`;
+  `;
 }
 
 /* ------------------------------------------------------------------ */
-/*  POST handler                                                       */
+/*  Build Client Auto-Reply Email HTML                               */
 /* ------------------------------------------------------------------ */
+function buildClientHTML(name: string) {
+  return `
+<!DOCTYPE html>
+<html>
+<body style="margin:0;padding:0;background:#eef4fb;font-family:Arial,sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="padding:20px;">
+<tr>
+<td align="center">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:680px;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.08);">
+
+<tr>
+<td style="background:linear-gradient(135deg,#0b63f6,#00b8ff);padding:34px;text-align:center;">
+<h1 style="margin:0;color:#fff;">CuraBotics AI</h1>
+<p style="margin:10px 0 0;color:#eaf7ff;">Healthcare Technology • Robotics • Global Solutions</p>
+</td>
+</tr>
+
+<tr>
+<td style="padding:34px;">
+
+<h2 style="margin-top:0;">Thank You, ${name} 👋</h2>
+
+<p style="font-size:16px;line-height:1.8;color:#4b5563;">
+We have successfully received your consultation request.
+Our team will review your inquiry and contact you shortly.
+</p>
+
+<p style="font-size:16px;line-height:1.8;color:#4b5563;">
+At CuraBotics AI, we help organizations with:
+</p>
+
+<ul style="color:#111827;line-height:1.8;">
+<li>Medical Equipment Procurement</li>
+<li>Healthcare AI Solutions</li>
+<li>Hospital Technology Integration</li>
+<li>Strategic Global Partnerships</li>
+</ul>
+
+<div style="text-align:center;margin-top:28px;">
+<a href="https://curaboticsai.com"
+style="background:#0b63f6;color:#fff;text-decoration:none;padding:14px 28px;border-radius:10px;display:inline-block;font-weight:bold;">
+Visit Website
+</a>
+</div>
+
+<p style="margin-top:30px;color:#6b7280;">
+Regards,<br>
+CuraBotics AI Team
+</p>
+
+</td>
+</tr>
+
+<tr>
+<td style="background:#111827;color:#d1d5db;text-align:center;padding:22px;">
+Global Healthcare Innovation
+</td>
+</tr>
+
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
+`;
+}
+
 export async function POST(request: Request) {
   try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const body = await request.json();
 
     const {
@@ -103,7 +148,7 @@ export async function POST(request: Request) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!email?.trim() || !emailRegex.test(email)) {
       return NextResponse.json(
-        { error: "A valid email address is required." },
+        { error: "Invalid email address." },
         { status: 400 }
       );
     }
@@ -115,21 +160,34 @@ export async function POST(request: Request) {
       );
     }
 
-    /* ---------- Send email ---------- */
-    const { data: emailData, error: resendError } = await resend.emails.send({
+    /* ---------- Send Admin Notification Email ---------- */
+    const { error: adminError } = await resend.emails.send({
       from: "CuraBotics AI <onboarding@resend.dev>",
       to: [RECIPIENT_EMAIL],
       reply_to: email,
       subject: `🏥 Enterprise Inquiry — ${companyName} (${orgType})`,
-      html: buildEmailHTML(body),
+      html: buildAdminHTML(body),
     });
 
-    if (resendError) {
-      console.error("Resend API Email Delivery Error:", resendError);
+    if (adminError) {
+      console.error("Resend API Admin Contact Error:", adminError);
       return NextResponse.json(
         { error: "Failed to send inquiry via Resend API. Please try again later." },
         { status: 500 }
       );
+    }
+
+    /* ---------- Send Client Confirmation Email ---------- */
+    // Note: To send emails directly to subscribers via Resend, your domain must be verified.
+    const { error: clientError } = await resend.emails.send({
+      from: "CuraBotics AI <onboarding@resend.dev>",
+      to: [email],
+      subject: "Your Consultation Request Has Been Received | CuraBotics AI",
+      html: buildClientHTML(fullName),
+    });
+
+    if (clientError) {
+      console.error("Resend API Client Contact Error:", clientError);
     }
 
     return NextResponse.json(

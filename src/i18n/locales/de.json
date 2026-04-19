@@ -25,25 +25,24 @@
     "aboutCareers": "Karriere"
   },
   "hero": {
-    "badge": "GLOBAL HEALTHCARE TECHNOLOGY SOLUTIONS",
-    "titleLine1": "Transforming Global Healthcare Through",
-    "titleGradient": "Intelligent Technology & Medical Innovation",
-    "subtitle": "CuraBotics AI empowers hospitals, clinics, laboratories, and healthcare institutions with advanced medical equipment procurement, AI automation, robotics integration, and strategic global healthcare technology partnerships.",
-    "cta1": "Request Consultation",
-    "cta2": "Explore Solutions",
+    "badge": "GLOBALE GESUNDHEITSTECHNOLOGIE-LÖSUNGEN",
+    "titleLine1": "Globale Gesundheitsversorgung transformieren durch",
+    "titleGradient": "Intelligente Technologie & medizinische Innovation",
+    "subtitle": "CuraBotics AI unterstützt Krankenhäuser, Kliniken, Laboratorien und Gesundheitseinrichtungen mit fortschrittlicher medizinischer Gerätebeschaffung, KI-Automatisierung, Robotik-Integration und strategischen globalen Gesundheitstechnologie-Partnerschaften.",
+    "cta1": "Beratung anfordern",
+    "cta2": "Lösungen entdecken",
     "stat1Value": "50+",
-    "stat1Label": "Equipment Types",
+    "stat1Label": "Gerätetypen",
     "stat2Value": "30+",
-    "stat2Label": "Countries Served",
+    "stat2Label": "Länder bedient",
     "stat3Value": "100+",
-    "stat3Label": "Manufacturers"
+    "stat3Label": "Hersteller"
   },
   "trust": {
-    "t1": "Global Procurement Network",
-    "t2": "AI Healthcare Automation",
-    "t3": "Advanced Robotics Integration",
-    "t4": "24/7 Technical Support",
-    "t5": "End-to-End technische Integration"
+    "t1": "Globales Beschaffungsnetzwerk",
+    "t2": "KI-Gesundheitsautomatisierung",
+    "t3": "Fortschrittliche Robotik-Integration",
+    "t4": "24/7 Technischer Support"
   },
   "about": {
     "badge": "Unsere Vision",
@@ -142,7 +141,7 @@
     "f4Title": "Strategische Beschaffungsexpertise",
     "f4Desc": "Tiefes Branchenwissen kombiniert mit Verhandlungsexpertise für optimale Gerätebeschaffung.",
     "f5Title": "Technische Serviceexzellenz",
-    "f5Desc": "Engagierte Ingenieurteams für Installation, Kalibrierung und 24/7 technischen Support.",
+    "f5Desc": "Engagierte Ingenieurteams für Installation, Kalibrierung, präventive Wartung und 24/7 technischen Support.",
     "f6Title": "Zukunftssichere Lösungen",
     "f6Desc": "Zukunftsorientierte Technologieintegration für moderne Gesundheitsversorgung."
   },
@@ -249,5 +248,32 @@
     "terms": "Nutzungsbedingungen",
     "privacy": "Datenschutzrichtlinie",
     "rights": "Alle Rechte vorbehalten."
+  },
+  "indiaGermanyBridge": {
+    "badge": "Global MedTech Corridor",
+    "titleLine1": "Connecting India & Germany",
+    "titleGradient": "Healthcare Innovation",
+    "subtitle": "Bridging India's massive hospital demand and distribution scale with Germany's manufacturing precision and engineering excellence.",
+    "centerTag": "Strategic Moat",
+    "deTitle": "German MedTech Ecosystem",
+    "deSubtitle": "Engineering Excellence & CE MDR Standard",
+    "deFeat1": "Precision Manufacturing",
+    "deFeat1Desc": "World-class robotics and highly reliable medical imaging equipment.",
+    "deFeat2": "CE / MDR Compliance",
+    "deFeat2Desc": "Strict quality standards ensuring the highest level of patient safety.",
+    "deFeat3": "R&D Innovation",
+    "deFeat3Desc": "Advanced research labs continuously pushing medical frontiers.",
+    "inTitle": "Indian Healthcare Market",
+    "inSubtitle": "Massive Scale & Government Procurement",
+    "inFeat1": "Hospital Demand",
+    "inFeat1Desc": "Rapidly growing multi-specialty hospital infrastructure.",
+    "inFeat2": "GeM Ecosystem",
+    "inFeat2Desc": "Access to large-scale government procurement tenders.",
+    "inFeat3": "Distribution Scale",
+    "inFeat3Desc": "Extensive reach delivering premium care to a billion people.",
+    "ctaTitle": "Enter New Markets Today",
+    "ctaDesc": "Partner with CuraBotics AI for cross-border strategic sourcing, market entry support, and robotics deployment.",
+    "btn1": "Explore Partnerships",
+    "btn2": "Request Consultation"
   }
 }

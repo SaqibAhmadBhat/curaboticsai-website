@@ -1,8 +1,19 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Projects",
-  description: "Discover CuraBotics AI projects — real-world applications of intelligent robotics in healthcare.",
+  title: "Projects — Healthcare Innovation Case Studies",
+  description:
+    "Discover CuraBotics AI projects — real-world case studies of intelligent robotics, AI automation, and medical equipment deployment in hospitals and healthcare facilities around the world.",
+  alternates: {
+    canonical: "https://curaboticsai.com/projects",
+  },
+  openGraph: {
+    title: "CuraBotics AI Projects — Healthcare Innovation in Action",
+    description:
+      "Real-world healthcare technology implementations: robotics integration, AI automation, and medical procurement success stories.",
+    url: "https://curaboticsai.com/projects",
+    type: "website",
+  },
 };
 
 export default function ProjectsPage() {
@@ -13,7 +24,9 @@ export default function ProjectsPage() {
           Our Projects
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-[hsl(var(--muted-foreground))]">
-          Innovative solutions powering the future of healthcare.
+          Innovative healthcare technology solutions deployed worldwide.
+          Explore how CuraBotics AI is transforming hospitals with robotics, AI 
+          automation, and precision medical equipment procurement.
         </p>
       </div>
     </section>

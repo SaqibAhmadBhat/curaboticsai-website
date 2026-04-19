@@ -7,6 +7,7 @@ import { EquipmentShowcaseSection } from "@/components/sections/home/EquipmentSh
 import { IndustriesSection } from "@/components/sections/home/IndustriesSection";
 import { WhyChooseUsSection } from "@/components/sections/home/WhyChooseUsSection";
 import { InnovationSection } from "@/components/sections/home/InnovationSection";
+import { IndiaGermanyBridge } from "@/components/sections/home/IndiaGermanyBridge";
 import { PartnershipBridge } from "@/components/sections/home/PartnershipBridge";
 import { FeaturedPartners } from "@/components/sections/home/FeaturedPartners";
 import { AnimatedStatsCounter } from "@/components/sections/home/AnimatedStatsCounter";
@@ -26,8 +27,9 @@ export default function Home() {
       {/* 7 */}  <WorkflowSection />
       {/* 8 */}  <WhyChooseUsSection />
       {/* 9 */}  <InnovationSection />
-      {/* 10 */ } <PartnershipBridge />
-      {/* 11 */ } <FeaturedPartners />
+      {/* 10 */ } <IndiaGermanyBridge />
+      {/* 11 */ } <PartnershipBridge />
+      {/* 12 */ } <FeaturedPartners />
       {/* 12 */ } <AnimatedStatsCounter />
       {/* 13 */ } <ProjectsShowcase />
       {/* 14 */ } <FounderPreview />
