@@ -6,11 +6,30 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/_next/", "/private/"],
+        crawlDelay: 2,
       },
       {
-        userAgent: "GPTBot",
+        // Block AI Bots and Aggressive Scrapers
+        userAgent: [
+          "GPTBot",
+          "ChatGPT-User",
+          "CCBot",
+          "anthropic-ai",
+          "Claude-Web",
+          "Omigili",
+          "OmigiliBot",
+          "FacebookBot",
+          "Bytespider",
+        ],
         disallow: ["/"],
+      },
+      {
+        userAgent: "Googlebot",
+        allow: "/",
+      },
+      {
+        userAgent: "Bingbot",
+        allow: "/",
       },
     ],
     sitemap: "https://curaboticsai.com/sitemap.xml",

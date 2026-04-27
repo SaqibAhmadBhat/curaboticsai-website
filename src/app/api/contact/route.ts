@@ -1,7 +1,17 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
-const RECIPIENT_EMAIL = "er.swt.saqibahmad@gmail.com";
+function createTransporter() {
+  return nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_APP_PASSWORD,
+    },
+  });
+}
 
 /* ------------------------------------------------------------------ */
 /*  Build Admin Email HTML                                           */
@@ -114,7 +124,6 @@ Global Healthcare Innovation
 
 export async function POST(request: Request) {
   try {
-    const resend = new Resend(process.env.RESEND_API_KEY);
     const body = await request.json();
 
     const {
@@ -160,35 +169,31 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+       console.error("Missing Gmail credentials in environment variables.");
+       return NextResponse.json({ error: "Server configuration error." }, { status: 500 });
+    }
+
+    const transporter = createTransporter();
+    const BRAND_EMAIL = process.env.GMAIL_USER;
+    const ADMIN_EMAIL = process.env.TO_EMAIL || process.env.GMAIL_USER;
+
     /* ---------- Send Admin Notification Email ---------- */
-    const { error: adminError } = await resend.emails.send({
-      from: "CuraBotics AI <onboarding@resend.dev>",
-      to: [RECIPIENT_EMAIL],
-      reply_to: email,
+    await transporter.sendMail({
+      from: `"CuraBotics AI" <${BRAND_EMAIL}>`,
+      to: ADMIN_EMAIL,
+      replyTo: email,
       subject: `🏥 Enterprise Inquiry — ${companyName} (${orgType})`,
       html: buildAdminHTML(body),
     });
 
-    if (adminError) {
-      console.error("Resend API Admin Contact Error:", adminError);
-      return NextResponse.json(
-        { error: "Failed to send inquiry via Resend API. Please try again later." },
-        { status: 500 }
-      );
-    }
-
     /* ---------- Send Client Confirmation Email ---------- */
-    // Note: To send emails directly to subscribers via Resend, your domain must be verified.
-    const { error: clientError } = await resend.emails.send({
-      from: "CuraBotics AI <onboarding@resend.dev>",
-      to: [email],
+    await transporter.sendMail({
+      from: `"CuraBotics AI" <${BRAND_EMAIL}>`,
+      to: email,
       subject: "Your Consultation Request Has Been Received | CuraBotics AI",
       html: buildClientHTML(fullName),
     });
-
-    if (clientError) {
-      console.error("Resend API Client Contact Error:", clientError);
-    }
 
     return NextResponse.json(
       { success: true, message: "Consultation inquiry submitted successfully." },

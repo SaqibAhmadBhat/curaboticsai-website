@@ -21,6 +21,11 @@ export function Footer() {
             </Link>
             <p className="text-sm text-[hsl(var(--muted-foreground))] leading-relaxed max-w-sm">{t("footer.tagline")}</p>
             <NewsletterSignup />
+            <div className="mt-4 flex flex-col gap-1.5">
+              <span className="text-xs font-semibold uppercase tracking-wider text-[hsl(var(--primary))]">Global Healthcare Gateway</span>
+              <span className="text-sm text-[hsl(var(--muted-foreground))]">India ↔ Germany Healthcare Bridge</span>
+              <span className="text-sm text-[hsl(var(--muted-foreground))]">Robotics Integration • Procurement Expertise</span>
+            </div>
           </div>
           <div className="flex flex-col gap-4">
             <h4 className="font-semibold text-[hsl(var(--foreground))] text-sm uppercase tracking-wider">{t("footer.colCompany")}</h4>

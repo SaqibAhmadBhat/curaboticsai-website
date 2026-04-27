@@ -1,7 +1,17 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
-const RECIPIENT_EMAIL = "er.swt.saqibahmad@gmail.com";
+function createTransporter() {
+  return nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_APP_PASSWORD,
+    },
+  });
+}
 
 function buildSubscriberWelcomeHTML() {
   return `
@@ -110,7 +120,6 @@ Building the bridge between healthcare and innovation.
 
 export async function POST(req: Request) {
   try {
-    const resend = new Resend(process.env.RESEND_API_KEY);
     const body = await req.json();
     const email = body.email?.trim().toLowerCase();
 
@@ -123,36 +132,30 @@ export async function POST(req: Request) {
       );
     }
 
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+      console.error("Missing Gmail credentials in environment variables.");
+      return NextResponse.json({ error: "Server configuration error." }, { status: 500 });
+    }
+
+    const transporter = createTransporter();
+    const BRAND_EMAIL = process.env.GMAIL_USER;
+    const ADMIN_EMAIL = process.env.TO_EMAIL || process.env.GMAIL_USER;
+
     /* ---------- Send notification email to Admin ---------- */
-    const { error: adminError } = await resend.emails.send({
-      from: "CuraBotics AI <onboarding@resend.dev>",
-      to: [RECIPIENT_EMAIL],
+    await transporter.sendMail({
+      from: `"CuraBotics AI" <${BRAND_EMAIL}>`,
+      to: ADMIN_EMAIL,
       subject: `📬 New Newsletter Subscriber — ${email}`,
       html: `<h2>New Subscriber</h2><p><strong>Email:</strong> ${email}</p><p><strong>Time:</strong> ${new Date().toLocaleString()}</p>`
     });
 
-    if (adminError) {
-      console.error("Resend API Admin Newsletter Error:", adminError);
-      return NextResponse.json(
-        { error: "Subscription delivery failed. Please try again." },
-        { status: 500 }
-      );
-    }
-
     /* ---------- Send Premium Welcome Email to Subscriber ---------- */
-    // Note: To send emails directly to subscribers via Resend, your domain must be verified.
-    // If you are still using the sandbox domain (onboarding@resend.dev), it might fail sending to custom addresses.
-    const { error: subscriberError } = await resend.emails.send({
-      from: "CuraBotics AI <onboarding@resend.dev>",
-      to: [email],
+    await transporter.sendMail({
+      from: `"CuraBotics AI" <${BRAND_EMAIL}>`,
+      to: email,
       subject: "Welcome to CuraBotics AI | Future of Healthcare 🚀",
       html: buildSubscriberWelcomeHTML()
     });
-
-    if (subscriberError) {
-      // Log it but do not fail the request from the user's perspective, since their sub was captured by admin.
-      console.error("Resend API Subscriber Welcome Error:", subscriberError);
-    }
 
     return NextResponse.json(
       { success: true, message: "Thank you for subscribing to CuraBotics AI updates." },
@@ -160,9 +163,8 @@ export async function POST(req: Request) {
     );
   } catch (error) {
     console.error("NEWSLETTER ERROR:", error);
-
     return NextResponse.json(
-      { error: "Subscription failed. Please try again." },
+      { error: "Subscription failed. Please try again later." },
       { status: 500 }
     );
   }

@@ -35,12 +35,12 @@ export const metadata: Metadata = {
 
   title: {
     default:
-      "CuraBotics AI | Global Healthcare Technology, Medical Equipment & AI Solutions",
-    template: "%s | CuraBotics AI — Healthcare Technology",
+      "CuraBotics AI | Global Healthcare Technology, Medical Equipment, AI & Robotics",
+    template: "%s | CuraBotics AI",
   },
 
   description:
-    "CuraBotics AI is a global healthcare technology company specialising in medical equipment procurement, AI-powered hospital automation, robotics integration, and strategic innovation for modern healthcare systems worldwide.",
+    "CuraBotics AI connects hospitals, manufacturers, robotics, AI automation, and medical equipment procurement across India and Germany.",
 
   keywords: [
     "CuraBotics AI",
@@ -86,9 +86,10 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "CuraBotics AI — Global Healthcare Technology & AI Solutions",
+    title:
+      "CuraBotics AI | Global Healthcare Technology, Medical Equipment, AI & Robotics",
     description:
-      "Leading healthcare technology company providing medical equipment procurement, AI automation, robotics integration, and strategic hospital innovation worldwide.",
+      "CuraBotics AI connects hospitals, manufacturers, robotics, AI automation, and medical equipment procurement across India and Germany.",
     url: "https://curaboticsai.com",
     siteName: "CuraBotics AI",
     locale: "en_US",
@@ -112,10 +113,9 @@ export const metadata: Metadata = {
     creator: "@CuraBoticsAI",
   },
 
+  /* ✅ GOOGLE VERIFICATION ADDED HERE */
   verification: {
-    // Populate these after setting up Google Search Console & Bing Webmaster Tools
-    // google: "YOUR_GOOGLE_VERIFICATION_CODE",
-    // yandex: "YOUR_YANDEX_VERIFICATION_CODE",
+    google: "oLgOve0DTHASC8vm67Br_T7ppTQxqaVYE7xAc0MYZmA",
   },
 
   category: "Healthcare Technology",
