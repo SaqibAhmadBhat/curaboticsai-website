@@ -1,17 +1,5 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
-
-function createTransporter() {
-  return nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD,
-    },
-  });
-}
+import { Resend } from "resend";
 
 /* ------------------------------------------------------------------ */
 /*  Build Admin Email HTML                                           */
@@ -125,6 +113,7 @@ Global Healthcare Innovation
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    console.log("📩 Contact API — Request body:", JSON.stringify(body, null, 2));
 
     const {
       fullName,
@@ -157,53 +146,73 @@ export async function POST(request: Request) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!email?.trim() || !emailRegex.test(email)) {
       return NextResponse.json(
-        { error: "Invalid email address." },
+        { success: false, error: "Invalid email address." },
         { status: 400 }
       );
     }
 
     if (missing.length > 0) {
       return NextResponse.json(
-        { error: `Missing required fields: ${missing.join(", ")}` },
+        { success: false, error: `Missing required fields: ${missing.join(", ")}` },
         { status: 400 }
       );
     }
 
-    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-       console.error("Missing Gmail credentials in environment variables.");
-       return NextResponse.json({ error: "Server configuration error." }, { status: 500 });
+    /* ---------- Resend Setup ---------- */
+    if (!process.env.RESEND_API_KEY) {
+      console.error("❌ RESEND_API_KEY is not set in environment variables.");
+      return NextResponse.json(
+        { success: false, error: "Server configuration error." },
+        { status: 500 }
+      );
     }
 
-    const transporter = createTransporter();
-    const BRAND_EMAIL = process.env.GMAIL_USER;
-    const ADMIN_EMAIL = process.env.TO_EMAIL || process.env.GMAIL_USER;
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const SENDER = "CuraBotics AI <onboarding@resend.dev>";
+    const ADMIN_EMAIL = "saqibahmadbhat885@gmail.com";
 
     /* ---------- Send Admin Notification Email ---------- */
-    await transporter.sendMail({
-      from: `"CuraBotics AI" <${BRAND_EMAIL}>`,
-      to: ADMIN_EMAIL,
-      replyTo: email,
+    console.log("📤 Sending admin notification email...");
+    const adminResult = await resend.emails.send({
+      from: SENDER,
+      to: [ADMIN_EMAIL],
+      reply_to: email,
       subject: `🏥 Enterprise Inquiry — ${companyName} (${orgType})`,
       html: buildAdminHTML(body),
     });
+    console.log("✅ Admin email result:", JSON.stringify(adminResult, null, 2));
+
+    if (adminResult.error) {
+      console.error("❌ Resend admin email error:", adminResult.error);
+      return NextResponse.json(
+        { success: false, error: "Failed to send email. Please try again." },
+        { status: 500 }
+      );
+    }
 
     /* ---------- Send Client Confirmation Email ---------- */
-    await transporter.sendMail({
-      from: `"CuraBotics AI" <${BRAND_EMAIL}>`,
-      to: email,
+    console.log("📤 Sending client confirmation email to:", email);
+    const clientResult = await resend.emails.send({
+      from: SENDER,
+      to: [email],
       subject: "Your Consultation Request Has Been Received | CuraBotics AI",
       html: buildClientHTML(fullName),
     });
+    console.log("✅ Client email result:", JSON.stringify(clientResult, null, 2));
+
+    if (clientResult.error) {
+      console.error("⚠️ Client confirmation email failed (non-critical):", clientResult.error);
+      // Non-critical: admin already received the inquiry
+    }
 
     return NextResponse.json(
       { success: true, message: "Consultation inquiry submitted successfully." },
       { status: 200 }
     );
   } catch (error) {
-    // We log the unexpected error server-side to avoid leaking any internal stack trace to the frontend
-    console.error("Contact API Unexpected Error:", error);
+    console.error("❌ Contact API Unexpected Error:", error);
     return NextResponse.json(
-      { error: "An unexpected error occurred. Please try again or contact us directly." },
+      { success: false, error: "An unexpected error occurred. Please try again or contact us directly." },
       { status: 500 }
     );
   }

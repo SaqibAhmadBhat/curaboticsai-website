@@ -311,6 +311,25 @@ export function ConsultationModal() {
                   </AnimatePresence>
                 </div>
 
+                {/* Toast Notification */}
+                <AnimatePresence>
+                  {toast && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className={`flex items-center gap-3 px-5 py-3 rounded-xl text-sm font-medium mt-4 ${
+                        toast.type === "success"
+                          ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                          : "bg-red-500/10 text-red-400 border border-red-500/20"
+                      }`}
+                    >
+                      {toast.type === "success" ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
+                      <span>{toast.message}</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 {/* Footer Controls */}
                 <div className="flex items-center justify-between mt-8 pt-6 border-t border-border/40">
                   {step > 0 ? (

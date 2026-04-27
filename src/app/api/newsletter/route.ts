@@ -1,17 +1,5 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
-
-function createTransporter() {
-  return nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD,
-    },
-  });
-}
+import { Resend } from "resend";
 
 function buildSubscriberWelcomeHTML() {
   return `
@@ -77,7 +65,7 @@ Visit Website
 </table>
 
 <p style="margin-top:32px;color:#4b5563;font-size:16px;line-height:1.8;">
-We’re building solutions that connect healthcare with intelligent technology worldwide.
+We're building solutions that connect healthcare with intelligent technology worldwide.
 Thank you for joining us early.
 </p>
 
@@ -101,7 +89,7 @@ Building the bridge between healthcare and innovation.
 <p style="margin:18px 0 0;">
 <a href="https://curaboticsai.com" style="color:#60a5fa;text-decoration:none;">Website</a>
 &nbsp; | &nbsp;
-<a href="https://linkedin.com" style="color:#60a5fa;text-decoration:none;">LinkedIn</a>
+<a href="https://linkedin.com/company/curaboticsai" style="color:#60a5fa;text-decoration:none;">LinkedIn</a>
 </p>
 
 </td>
@@ -122,49 +110,71 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const email = body.email?.trim().toLowerCase();
+    console.log("📬 Newsletter API — Subscriber email:", email);
 
     /* ---------- Email validation ---------- */
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!email?.trim() || !emailRegex.test(email)) {
+    if (!email || !emailRegex.test(email)) {
       return NextResponse.json(
-        { error: "Invalid email address" },
+        { success: false, error: "Invalid email address" },
         { status: 400 }
       );
     }
 
-    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-      console.error("Missing Gmail credentials in environment variables.");
-      return NextResponse.json({ error: "Server configuration error." }, { status: 500 });
+    /* ---------- Resend Setup ---------- */
+    if (!process.env.RESEND_API_KEY) {
+      console.error("❌ RESEND_API_KEY is not set in environment variables.");
+      return NextResponse.json(
+        { success: false, error: "Server configuration error." },
+        { status: 500 }
+      );
     }
 
-    const transporter = createTransporter();
-    const BRAND_EMAIL = process.env.GMAIL_USER;
-    const ADMIN_EMAIL = process.env.TO_EMAIL || process.env.GMAIL_USER;
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const SENDER = "CuraBotics AI <onboarding@resend.dev>";
+    const ADMIN_EMAIL = "saqibahmadbhat885@gmail.com";
 
     /* ---------- Send notification email to Admin ---------- */
-    await transporter.sendMail({
-      from: `"CuraBotics AI" <${BRAND_EMAIL}>`,
-      to: ADMIN_EMAIL,
+    console.log("📤 Sending admin notification about new subscriber...");
+    const adminResult = await resend.emails.send({
+      from: SENDER,
+      to: [ADMIN_EMAIL],
       subject: `📬 New Newsletter Subscriber — ${email}`,
-      html: `<h2>New Subscriber</h2><p><strong>Email:</strong> ${email}</p><p><strong>Time:</strong> ${new Date().toLocaleString()}</p>`
+      html: `<h2>New Subscriber</h2><p><strong>Email:</strong> ${email}</p><p><strong>Time:</strong> ${new Date().toLocaleString()}</p>`,
     });
+    console.log("✅ Admin notification result:", JSON.stringify(adminResult, null, 2));
+
+    if (adminResult.error) {
+      console.error("❌ Resend admin notification error:", adminResult.error);
+      return NextResponse.json(
+        { success: false, error: "Subscription failed. Please try again later." },
+        { status: 500 }
+      );
+    }
 
     /* ---------- Send Premium Welcome Email to Subscriber ---------- */
-    await transporter.sendMail({
-      from: `"CuraBotics AI" <${BRAND_EMAIL}>`,
-      to: email,
+    console.log("📤 Sending welcome email to subscriber:", email);
+    const subscriberResult = await resend.emails.send({
+      from: SENDER,
+      to: [email],
       subject: "Welcome to CuraBotics AI | Future of Healthcare 🚀",
-      html: buildSubscriberWelcomeHTML()
+      html: buildSubscriberWelcomeHTML(),
     });
+    console.log("✅ Subscriber welcome email result:", JSON.stringify(subscriberResult, null, 2));
+
+    if (subscriberResult.error) {
+      console.error("⚠️ Subscriber welcome email failed (non-critical):", subscriberResult.error);
+      // Non-critical: admin already received the notification
+    }
 
     return NextResponse.json(
       { success: true, message: "Thank you for subscribing to CuraBotics AI updates." },
       { status: 200 }
     );
   } catch (error) {
-    console.error("NEWSLETTER ERROR:", error);
+    console.error("❌ Newsletter API Unexpected Error:", error);
     return NextResponse.json(
-      { error: "Subscription failed. Please try again later." },
+      { success: false, error: "Subscription failed. Please try again later." },
       { status: 500 }
     );
   }
