@@ -31,14 +31,14 @@ export function NewsletterSignup() {
         body: JSON.stringify({ email }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => null);
 
       if (!res.ok) {
         setStatus("error");
-        setMessage(data.error || "Subscription failed.");
+        setMessage(data?.message || data?.error || "Subscription failed. Please try again.");
       } else {
         setStatus("success");
-        setMessage("Thank you for subscribing to CuraBotics AI updates.");
+        setMessage(data?.message || "Subscribed successfully!");
         setEmail("");
       }
     } catch {
