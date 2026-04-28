@@ -1,9 +1,27 @@
 import { NextResponse } from "next/server";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const rateLimits = new Map<string, { count: number; timestamp: number }>();
 
 export async function POST(req: Request) {
   try {
+    const ip = req.headers.get("x-forwarded-for") || "unknown";
+    const now = Date.now();
+    const windowMs = 60 * 1000;
+    const limit = 5;
+    
+    if (ip !== "unknown") {
+      const userLimit = rateLimits.get(ip);
+      if (userLimit && now - userLimit.timestamp < windowMs) {
+        if (userLimit.count >= limit) {
+          return NextResponse.json({ success: false, message: "Too many requests." }, { status: 429 });
+        }
+        rateLimits.set(ip, { count: userLimit.count + 1, timestamp: userLimit.timestamp });
+      } else {
+        rateLimits.set(ip, { count: 1, timestamp: now });
+      }
+    }
+
     if (!OPENAI_API_KEY) {
       return NextResponse.json(
         { success: false, message: "OpenAI API Key is missing in environment variables" },

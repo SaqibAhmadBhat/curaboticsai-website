@@ -7,8 +7,13 @@ import { ConsultationProvider } from "@/contexts/ConsultationContext";
 import { ConsultationModal } from "@/components/modals/ConsultationModal";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { StickyCta } from "@/components/ui/StickyCta";
-import { ExitIntentPopup } from "@/components/ui/ExitIntentPopup";
+import dynamic from "next/dynamic";
 import { JsonLd } from "@/components/seo/JsonLd";
+
+const ExitIntentPopup = dynamic(
+  () => import("@/components/ui/ExitIntentPopup").then((mod) => mod.ExitIntentPopup),
+  { ssr: false }
+);
 
 const inter = Inter({
   subsets: ["latin"],

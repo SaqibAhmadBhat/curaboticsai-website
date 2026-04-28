@@ -29,8 +29,8 @@ const getBaseTemplate = (title: string, preheader: string, content: string) => `
       ${content}
     </div>
     <div class="footer">
-      <p style="margin: 0 0 8px;">&copy; ${new Date().getFullYear()} CuraBotics AI. All rights reserved.</p>
-      <p style="margin: 0;">You are receiving this email because you subscribed to updates at curabotics.com</p>
+      <p style="margin: 0 0 8px;">&copy; CuraBotics AI &mdash; All rights reserved</p>
+      <p style="margin: 0;">Unsubscribe anytime</p>
     </div>
   </div>
 </body>
