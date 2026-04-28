@@ -14,6 +14,7 @@ import { AnimatedStatsCounter } from "@/components/sections/home/AnimatedStatsCo
 import { ProjectsShowcase } from "@/components/sections/home/ProjectsShowcase";
 import { FounderPreview } from "@/components/sections/home/FounderPreview";
 import { ContactCta } from "@/components/sections/home/ContactCta";
+import { NewsletterSection } from "@/components/sections/home/NewsletterSection";
 
 export default function Home() {
   return (
@@ -33,7 +34,8 @@ export default function Home() {
       {/* 12 */ } <AnimatedStatsCounter />
       {/* 13 */ } <ProjectsShowcase />
       {/* 14 */ } <FounderPreview />
-      {/* 15 */ } <ContactCta />
+      {/* 15 */ } <NewsletterSection />
+      {/* 16 */ } <ContactCta />
     </div>
   );
 }

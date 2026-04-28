@@ -6,7 +6,8 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ConsultationProvider } from "@/contexts/ConsultationContext";
 import { ConsultationModal } from "@/components/modals/ConsultationModal";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
-import { StickyCtaBar } from "@/components/ui/StickyCtaBar";
+import { StickyCta } from "@/components/ui/StickyCta";
+import { ExitIntentPopup } from "@/components/ui/ExitIntentPopup";
 import { JsonLd } from "@/components/seo/JsonLd";
 
 const inter = Inter({
@@ -154,7 +155,8 @@ export default function RootLayout({
               {children}
               <ConsultationModal />
               <FloatingWhatsApp />
-              <StickyCtaBar />
+              <StickyCta />
+              <ExitIntentPopup />
             </ConsultationProvider>
           </LanguageProvider>
         </ThemeProvider>
