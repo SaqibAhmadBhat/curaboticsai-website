@@ -50,15 +50,22 @@
   }
 
   * {
-    @apply border-[hsl(var(--border))];
+    @apply border-[hsl(var(--border))] box-border;
   }
 
   html {
     scroll-behavior: smooth;
+    /* Prevent horizontal overflow at document level */
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-[hsl(var(--background))] text-[hsl(var(--foreground))] antialiased;
+    /* Prevent horizontal overflow */
+    overflow-x: hidden;
+    /* Improve text rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   ::selection {
@@ -71,13 +78,13 @@
 
   /* Custom Scrollbar */
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
   }
   ::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-[hsl(var(--muted-foreground)/0.3)] rounded-full hover:bg-[hsl(var(--muted-foreground)/0.5)] transition-colors;
+    @apply bg-[hsl(var(--muted-foreground)/0.25)] rounded-full hover:bg-[hsl(var(--muted-foreground)/0.45)] transition-colors;
   }
 }
 
@@ -86,7 +93,7 @@
     text-wrap: balance;
   }
 
-  /* Structural Utilities */
+  /* ── Structural Utilities ──────────────────────────────────── */
   .section-spacing {
     @apply py-16 md:py-24 lg:py-32;
   }
@@ -95,22 +102,57 @@
     @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
   }
 
-  /* Aesthetic Utilities */
+  /* ── Aesthetic Utilities ───────────────────────────────────── */
   .glassmorphism {
     @apply bg-white/40 backdrop-blur-md border border-white/20 dark:bg-black/40 dark:border-white/10;
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-500 to-brand-500;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--accent))] to-[hsl(var(--primary))];
   }
   
   .shadow-soft {
     @apply shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(255,255,255,0.02)];
   }
 
-  /* Interactive Elements */
+  /* ── Interactive Elements ──────────────────────────────────── */
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-md font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] hover:bg-[hsl(var(--primary)/0.9)] hover:shadow-lg hover:-translate-y-0.5 h-10 py-2 px-4;
+    @apply inline-flex items-center justify-center rounded-md font-medium transition-all
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]
+           focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none
+           ring-offset-background bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]
+           hover:bg-[hsl(var(--primary)/0.9)] hover:shadow-lg hover:-translate-y-0.5
+           h-10 py-2 px-4 text-sm;
+  }
+
+  /* ── Overflow guards ───────────────────────────────────────── */
+  .overflow-guard {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* ── Responsive typography helpers ────────────────────────── */
+  .heading-clamp {
+    font-size: clamp(1.5rem, 4vw + 1rem, 3.5rem);
+    line-height: 1.1;
+  }
+
+  .heading-clamp-lg {
+    font-size: clamp(2rem, 5vw + 1rem, 4.5rem);
+    line-height: 1.05;
+  }
+
+  .body-clamp {
+    font-size: clamp(0.9rem, 1.5vw + 0.5rem, 1.125rem);
+  }
+
+  /* ── Hide scrollbar (modal etc.) ──────────────────────────── */
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
 

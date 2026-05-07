@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { NewsletterSignup } from "@/components/ui/NewsletterSignup";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -17,7 +18,13 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
           <div className="lg:col-span-2 flex flex-col gap-6">
             <Link href="/" className="flex items-center gap-2" title="CuraBotics AI — Homepage">
-              <img src="/logo/curabotics-logo.png" alt="CuraBotics AI — Global Healthcare Technology" className="h-9 w-auto object-contain" loading="lazy" />
+              <Image
+                src="/logo/curabotics-logo.png"
+                alt="CuraBotics AI — Global Healthcare Technology"
+                width={144}
+                height={36}
+                className="h-9 w-auto object-contain"
+              />
             </Link>
             <p className="text-sm text-[hsl(var(--muted-foreground))] leading-relaxed max-w-sm">{t("footer.tagline")}</p>
             <NewsletterSignup />

@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import { FounderPreview } from "@/components/sections/home/FounderPreview";
+import { AboutPageContent } from "@/components/sections/about/AboutPageContent";
 
 export const metadata: Metadata = {
   title: "About Us — Our Mission & Vision",
   description:
-    "Learn about CuraBotics AI — a global healthcare technology company bridging German precision engineering with AI-driven medical solutions. Discover our mission, vision, founding story, and the team behind intelligent healthcare robotics and automation.",
-  alternates: {
-    canonical: "https://curaboticsai.com/about",
-  },
+    "CuraBotics AI is a global healthcare technology company bridging German precision engineering with AI-driven medical solutions. Discover our mission, vision, and the team behind intelligent healthcare robotics and automation.",
+  alternates: { canonical: "https://curaboticsai.com/about" },
   openGraph: {
-    title: "About CuraBotics AI — Our Mission & Team",
+    title: "About CuraBotics AI — Our Mission & Vision",
     description:
       "Discover the mission, vision, and team behind CuraBotics AI — bridging German engineering with AI-driven healthcare technology worldwide.",
     url: "https://curaboticsai.com/about",
@@ -18,9 +16,5 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-  return (
-    <div className="pt-20">
-      <FounderPreview />
-    </div>
-  );
+  return <AboutPageContent />;
 }

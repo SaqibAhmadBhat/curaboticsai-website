@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { ArrowRight, Factory, HeartPulse } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -33,7 +34,7 @@ export function PartnershipBridge() {
           </motion.div>
           <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.7, delay: 0.2 }} className="flex flex-col items-center gap-6 p-8 rounded-2xl border border-primary/30 bg-primary/10 backdrop-blur-sm text-center relative">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary text-white text-xs font-bold uppercase tracking-widest">{t("bridge.badge")}</div>
-            <img src="/logo/curabotics-logo.png" alt="CuraBotics AI" className="h-12 w-auto object-contain dark:brightness-0 dark:invert mt-4" />
+            <Image src="/logo/curabotics-logo.png" alt="CuraBotics AI" width={96} height={48} className="h-12 w-auto object-contain dark:brightness-0 dark:invert mt-4" />
             <p className="text-foreground text-sm leading-relaxed">{t("bridge.bridgeDesc")}</p>
             <div className="flex items-center gap-4 text-xs text-muted-foreground uppercase tracking-widest font-mono mt-2">
               <span>{t("bridge.step1")}</span><ArrowRight size={12} /><span>{t("bridge.step2")}</span><ArrowRight size={12} /><span>{t("bridge.step3")}</span>

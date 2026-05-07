@@ -7,13 +7,7 @@ import { ConsultationProvider } from "@/contexts/ConsultationContext";
 import { ConsultationModal } from "@/components/modals/ConsultationModal";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { StickyCta } from "@/components/ui/StickyCta";
-import dynamic from "next/dynamic";
 import { JsonLd } from "@/components/seo/JsonLd";
-
-const ExitIntentPopup = dynamic(
-  () => import("@/components/ui/ExitIntentPopup").then((mod) => mod.ExitIntentPopup),
-  { ssr: false }
-);
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,30 +34,26 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://curaboticsai.com"),
 
   title: {
-    default:
-      "CuraBotics AI | Global Healthcare Technology, Medical Equipment, AI & Robotics",
+    default: "CuraBotics AI | Healthcare AI & Medical Technology",
     template: "%s | CuraBotics AI",
   },
 
   description:
-    "CuraBotics AI connects hospitals, manufacturers, robotics, AI automation, and medical equipment procurement across India and Germany.",
+    "Global healthcare technology company specializing in AI automation, robotics, and medical equipment procurement solutions across India, Germany, and worldwide.",
 
   keywords: [
     "CuraBotics AI",
     "curaboticsai",
-    "curaboticsai.com",
     "medical equipment procurement",
-    "healthcare technology company",
+    "healthcare AI automation",
     "healthcare robotics",
     "hospital AI solutions",
-    "AI healthcare automation",
-    "medical technology",
-    "healthcare innovation",
+    "medical technology company",
+    "India Germany healthcare",
     "medical device sourcing",
     "hospital robotics integration",
-    "global healthcare solutions",
+    "AI healthcare automation",
     "healthcare startup",
-    "medical automation systems",
   ],
 
   authors: [{ name: "CuraBotics AI", url: "https://curaboticsai.com" }],
@@ -87,39 +77,42 @@ export const metadata: Metadata = {
   },
 
   icons: {
-    icon: "/logo/favicon.png",
+    icon: [
+      { url: "/logo/favicon.png", type: "image/png" },
+    ],
     apple: "/logo/favicon.png",
+    shortcut: "/logo/favicon.png",
   },
 
   openGraph: {
-    title:
-      "CuraBotics AI | Global Healthcare Technology, Medical Equipment, AI & Robotics",
+    title: "CuraBotics AI | Healthcare AI & Medical Technology",
     description:
-      "CuraBotics AI connects hospitals, manufacturers, robotics, AI automation, and medical equipment procurement across India and Germany.",
+      "Global healthcare technology company specializing in AI automation, robotics, and medical equipment procurement solutions across India, Germany, and worldwide.",
     url: "https://curaboticsai.com",
     siteName: "CuraBotics AI",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "/logo/curabotics-logo.png",
+        url: "https://curaboticsai.com/logo/curabotics-logo.png",
         width: 1200,
         height: 630,
-        alt: "CuraBotics AI — Healthcare Technology & AI Solutions",
+        alt: "CuraBotics AI — Healthcare AI & Medical Technology",
+        type: "image/png",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "CuraBotics AI — Healthcare Technology & AI Solutions",
+    title: "CuraBotics AI | Healthcare AI & Medical Technology",
     description:
-      "Global healthcare technology company — medical equipment procurement, AI automation, robotics, and hospital innovation.",
-    images: ["/logo/curabotics-logo.png"],
+      "Global healthcare technology company — AI automation, robotics, and medical equipment procurement across India, Germany, and worldwide.",
+    images: ["https://curaboticsai.com/logo/curabotics-logo.png"],
     creator: "@CuraBoticsAI",
+    site: "@CuraBoticsAI",
   },
 
-  /* ✅ GOOGLE VERIFICATION ADDED HERE */
   verification: {
     google: "oLgOve0DTHASC8vm67Br_T7ppTQxqaVYE7xAc0MYZmA",
   },
@@ -161,7 +154,6 @@ export default function RootLayout({
               <ConsultationModal />
               <FloatingWhatsApp />
               <StickyCta />
-              <ExitIntentPopup />
             </ConsultationProvider>
           </LanguageProvider>
         </ThemeProvider>

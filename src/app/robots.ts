@@ -6,10 +6,10 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        crawlDelay: 2,
+        disallow: ["/api/", "/_next/", "/data/"],
       },
       {
-        // Block AI Bots and Aggressive Scrapers
+        /* Block AI training scrapers */
         userAgent: [
           "GPTBot",
           "ChatGPT-User",
@@ -18,18 +18,22 @@ export default function robots(): MetadataRoute.Robots {
           "Claude-Web",
           "Omigili",
           "OmigiliBot",
-          "FacebookBot",
           "Bytespider",
+          "AhrefsBot",
+          "SemrushBot",
+          "DotBot",
         ],
         disallow: ["/"],
       },
       {
         userAgent: "Googlebot",
         allow: "/",
+        disallow: ["/api/", "/_next/", "/data/"],
       },
       {
         userAgent: "Bingbot",
         allow: "/",
+        disallow: ["/api/", "/_next/", "/data/"],
       },
     ],
     sitemap: "https://curaboticsai.com/sitemap.xml",

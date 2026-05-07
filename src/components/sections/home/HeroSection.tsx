@@ -13,7 +13,7 @@ export function HeroSection() {
   const { openConsultation } = useConsultation();
 
   return (
-    <section className="relative overflow-hidden bg-background pt-32 pb-20 lg:pt-44 lg:pb-28 min-h-[90vh] flex items-center">
+    <section className="relative overflow-hidden bg-background pt-28 pb-16 lg:pt-44 lg:pb-28 min-h-[90svh] flex items-center">
       {/* Background Visual Elements */}
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(to_bottom,white,transparent)] opacity-10" />
       
@@ -58,7 +58,7 @@ export function HeroSection() {
               <span className="text-xs font-bold uppercase tracking-widest">{t("hero.badge")}</span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight text-foreground leading-[1.1]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight text-foreground leading-[1.1] max-w-full">
               {t("hero.titleLine1")} <span className="text-transparent bg-clip-text bg-gradient-to-r from-[hsl(var(--primary))] to-blue-400">{t("hero.titleGradient")}</span>
             </h1>
 

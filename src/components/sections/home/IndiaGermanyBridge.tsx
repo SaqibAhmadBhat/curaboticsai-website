@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { ArrowRight, Globe2, HeartPulse, Hospital, Navigation, ShieldCheck, Stethoscope, BriefcaseMedical } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -119,7 +120,13 @@ export function IndiaGermanyBridge() {
             <div className="relative group">
               <div className="absolute inset-0 bg-white/20 rounded-full blur-2xl group-hover:bg-white/30 transition-all duration-500" />
               <div className="w-24 h-24 rounded-full bg-slate-900 border border-slate-700 p-2 relative z-10 flex items-center justify-center shadow-2xl">
-                <img src="/logo/curabotics-logo.png" alt="CuraBotics AI" className="w-14 h-14 object-contain brightness-0 invert" />
+                <Image
+                  src="/logo/curabotics-logo.png"
+                  alt="CuraBotics AI"
+                  width={56}
+                  height={56}
+                  className="w-14 h-14 object-contain brightness-0 invert"
+                />
               </div>
             </div>
 

@@ -144,7 +144,7 @@ export function ConsultationModal() {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-10">
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 md:p-10">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
@@ -154,11 +154,11 @@ export function ConsultationModal() {
 
           {/* Modal Container */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            initial={{ opacity: 0, scale: 0.97, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto overflow-x-hidden hide-scrollbar glassmorphism rounded-3xl border border-border/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] flex flex-col bg-background"
+            exit={{ opacity: 0, scale: 0.97, y: 30 }}
+            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            className="relative w-full sm:max-w-4xl max-h-[95dvh] sm:max-h-[90vh] overflow-y-auto overflow-x-hidden hide-scrollbar glassmorphism rounded-t-3xl sm:rounded-3xl border border-border/50 shadow-[0_-8px_40px_-8px_rgba(0,0,0,0.3)] sm:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] flex flex-col bg-background"
           >
             {/* Close Button */}
             <button onClick={closeConsultation} className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-background/50 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">

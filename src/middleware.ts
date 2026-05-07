@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-
-export function middleware(request: NextRequest) {
-  return NextResponse.next();
-}
+/**
+ * Next.js Middleware
+ *
+ * Currently passes all requests through.
+ * Add security headers, auth guards, or geo-redirects here as needed.
+ */
+export { } from "next/server";
 
 export const config = {
   matcher: [],
